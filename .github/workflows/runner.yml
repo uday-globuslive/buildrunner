@@ -40,3 +40,5 @@ jobs:
       - name: Push Docker image
         run: |
           docker push ${{ secrets.DOCKER_HUB_USERNAME }}/rhel8-openjdk11-maven-node:${{ github.run_number }}
+          docker tag  ${{ secrets.DOCKER_HUB_USERNAME }}/rhel8-openjdk11-maven-node:${{ github.run_number }} ${{ secrets.DOCKER_HUB_USERNAME }}/rhel8-openjdk11-maven-node:latest
+          docker push ${{ secrets.DOCKER_HUB_USERNAME }}/rhel8-openjdk11-maven-node:latest
