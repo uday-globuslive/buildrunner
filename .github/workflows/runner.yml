@@ -33,7 +33,7 @@ jobs:
             --build-arg RHEL_VERSION=8 \
             --build-arg OPENJDK_VERSION=11 \
             --build-arg MAVEN_VERSION=3.9.9 \
-            --build-arg NODE_VERSION=20.2.0 \
+            --build-arg NODE_VERSION=20 \
             -t ${{ secrets.DOCKER_HUB_USERNAME }}/rhel8-openjdk11-maven-node:${{ github.run_number }} .
 
       # Push the Docker image to Docker Hub
