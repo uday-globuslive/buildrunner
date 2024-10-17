@@ -3,7 +3,7 @@ FROM registry.access.redhat.com/ubi8/ubi:8.7
 
 # Arguments to specify versions
 ARG OPENJDK_VERSION=11
-ARG MAVEN_VERSION=3.6.3
+ARG MAVEN_VERSION=3.9.9
 ARG NODE_VERSION=22
 
 # Install OpenJDK 11, Maven, Node.js, and npm
