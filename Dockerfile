@@ -9,7 +9,7 @@ ARG NODE_VERSION=22
 # Install OpenJDK 11, Maven, Node.js, and npm
 RUN yum install -y java-${OPENJDK_VERSION}-openjdk-devel
 RUN curl -o apache-maven-${MAVEN_VERSION}-bin.tar.gz  "https://dlcdn.apache.org/maven/maven-3/${MAVEN_VERSION}/binaries/apache-maven-${MAVEN_VERSION}-bin.tar.gz" && ls -la
-RUN tar -xz -C /opt && ln -s /opt/apache-maven-${MAVEN_VERSION}/bin/mvn /usr/bin/mvn
+RUN tar -xz apache-maven-${MAVEN_VERSION}-bin.tar.gz -C /opt && ln -s /opt/apache-maven-${MAVEN_VERSION}/bin/mvn /usr/bin/mvn
 RUN  curl -sL https://rpm.nodesource.com/setup_${NODE_VERSION}.x | bash - \
   && yum install -y nodejs \
   && npm install -g npm \
