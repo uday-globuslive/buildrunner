@@ -10,7 +10,7 @@ ARG NODE_VERSION=22
 RUN yum install -y java-${OPENJDK_VERSION}-openjdk-devel
 RUN curl -s "https://www.apache.org/dyn/closer.cgi?path=/maven/maven-3/${MAVEN_VERSION}/binaries/apache-maven-${MAVEN_VERSION}-bin.tar.gz" | tar -xz -C /opt \
   && ln -s /opt/apache-maven-${MAVEN_VERSION}/bin/mvn /usr/bin/mvn
-RUN  curl -sL https://rpm.nodesource.com/setup_${NODE_VERSION}.x | bash - \
+RUN  curl -sL https://dlcdn.apache.org/maven/maven-3/3.9.9/binaries/apache-maven-3.9.9-bin.tar.gz https://rpm.nodesource.com/setup_${NODE_VERSION}.x | bash - \
   && yum install -y nodejs \
   && npm install -g npm \
   && yum clean all
