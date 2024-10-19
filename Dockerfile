@@ -2,9 +2,9 @@
 FROM registry.access.redhat.com/ubi8/ubi:8.7
 
 # Arguments to specify versions
-ARG OPENJDK_VERSION=11
-ARG MAVEN_VERSION=3.9.9
-ARG NODE_VERSION=22
+ARG OPENJDK_VERSION=17
+ARG MAVEN_VERSION=3.8.8
+ARG NODE_VERSION=18
 
 # Install OpenJDK 11, Maven, Node.js, and npm
 RUN yum install -y java-${OPENJDK_VERSION}-openjdk-devel nano git
