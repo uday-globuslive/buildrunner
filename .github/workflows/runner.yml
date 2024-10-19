@@ -31,11 +31,11 @@ jobs:
       - name: Build Docker image
         run: |
           docker build \
-            -t ${{ secrets.DOCKER_HUB_USERNAME }}/rhel8-openjdk17-maven-node-az:${{ github.run_number }} .
+            -t ${{ secrets.DOCKER_HUB_USERNAME }}/ubuntu-openjdk17-maven-node-az:${{ github.run_number }} .
 
       # Push the Docker image to Docker Hub
       - name: Push Docker image
         run: |
-          docker push ${{ secrets.DOCKER_HUB_USERNAME }}/rhel8-openjdk11-maven-node-az:${{ github.run_number }}
-          docker tag  ${{ secrets.DOCKER_HUB_USERNAME }}/rhel8-openjdk11-maven-node-az:${{ github.run_number }} ${{ secrets.DOCKER_HUB_USERNAME }}/rhel8-openjdk11-maven-node-az:latest
-          docker push ${{ secrets.DOCKER_HUB_USERNAME }}/rhel8-openjdk11-maven-node-az:latest
+          docker push ${{ secrets.DOCKER_HUB_USERNAME }}/ubuntu-openjdk17-maven-node-az:${{ github.run_number }}
+          docker tag  ${{ secrets.DOCKER_HUB_USERNAME }}/ubuntu-openjdk17-maven-node-az:${{ github.run_number }} ${{ secrets.DOCKER_HUB_USERNAME }}/ubuntu-openjdk17-maven-node-az:latest
+          docker push ${{ secrets.DOCKER_HUB_USERNAME }}/ubuntu-openjdk17-maven-node-az:latest
