@@ -39,3 +39,9 @@ jobs:
           docker push ${{ secrets.DOCKER_HUB_USERNAME }}/ubuntu-openjdk17-maven-node-az:${{ github.run_number }}
           docker tag  ${{ secrets.DOCKER_HUB_USERNAME }}/ubuntu-openjdk17-maven-node-az:${{ github.run_number }} ${{ secrets.DOCKER_HUB_USERNAME }}/ubuntu-openjdk17-maven-node-az:latest
           docker push ${{ secrets.DOCKER_HUB_USERNAME }}/ubuntu-openjdk17-maven-node-az:latest
+
+      # Show Docker image
+      - name: Show Docker image
+        run: |
+          echo ${{ secrets.DOCKER_HUB_USERNAME }}/ubuntu-openjdk17-maven-node-az:${{ github.run_number }}
+          echo ${{ secrets.DOCKER_HUB_USERNAME }}/ubuntu-openjdk17-maven-node-az:latest
