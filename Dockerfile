@@ -22,10 +22,11 @@ RUN curl -o apache-maven-${MAVEN_VERSION}-bin.tar.gz "https://dlcdn.apache.org/m
 RUN tar -xvzf apache-maven-${MAVEN_VERSION}-bin.tar.gz && ls -la
 RUN mv apache-maven-${MAVEN_VERSION} /opt/apache-maven-${MAVEN_VERSION} && ln -s /opt/apache-maven-${MAVEN_VERSION}/bin/mvn /usr/bin/mvn
 
-# Install Node.js and npm
+# Install Node.js, npm, and Yarn
 RUN curl -sL https://deb.nodesource.com/setup_${NODE_VERSION}.x | bash - \
     && apt-get install -y nodejs \
     && npm install -g npm \
+    && npm install -g yarn \
     && apt-get clean
 
 # Install Azure CLI
