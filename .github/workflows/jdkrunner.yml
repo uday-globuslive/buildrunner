@@ -20,7 +20,8 @@ jobs:
         run: |
           docker exec build-env bash -c "
           apt update && apt upgrade -y &&
-          apt install -y openjdk-17-jdk maven git jq nano net-tools curl wget gnupg &&
+          apt install -y openjdk-17-jdk maven git nano net-tools curl wget gnupg &&
+          apt install -y jq &&
           java -version &&
           mvn -version"
 
