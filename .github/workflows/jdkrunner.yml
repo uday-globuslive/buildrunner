@@ -1,0 +1,53 @@
+name: Build Java, Maven, Trivy Docker Image
+
+on:
+  workflow_dispatch: # Allows manual triggering
+
+jobs:
+  build-and-save-image:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Build Environment
+        run: |
+          docker pull ubuntu:latest
+          docker run -dit --name build-env ubuntu:latest bash
+
+      - name: Install Java JDK 17, Maven, and Dependencies
+        run: |
+          docker exec build-env bash -c "
+          apt update && apt upgrade -y &&
+          apt install -y openjdk-17-jdk maven curl wget gnupg &&
+          java -version &&
+          mvn -version"
+
+      - name: Install Trivy and Dependencies
+        run: |
+          docker exec build-env bash -c "
+          apt install -y apt-transport-https gnupg lsb-release &&
+          wget -qO - https://aquasecurity.github.io/trivy-repo/deb/public.key | gpg --dearmor -o /usr/share/keyrings/trivy-archive-keyring.gpg &&
+          echo 'deb [signed-by=/usr/share/keyrings/trivy-archive-keyring.gpg] https://aquasecurity.github.io/trivy-repo/deb $(lsb_release -cs) main' > /etc/apt/sources.list.d/trivy.list &&
+          apt update &&
+          apt install -y trivy &&
+          trivy --version"
+
+      - name: Commit Docker Changes
+        run: |
+          docker commit build-env custom-java-maven-trivy:latest
+
+      - name: Save Docker Image as TAR
+        run: |
+          docker save -o java-maven-trivy.tar custom-java-maven-trivy:latest
+
+      - name: Upload Docker Image as Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: java-maven-trivy-image
+          path: java-maven-trivy.tar
+
+      - name: Cleanup Docker Container
+        run: |
+          docker rm -f build-env
