@@ -51,7 +51,6 @@ jobs:
           wget -O jq https://github.com/stedolan/jq/releases/latest/download/jq-linux64 &&
           chmod +x jq &&
           mv jq /tmp/jq &&
-          rm trivy.tar.gz &&
           cd /tmp &&
           ./jq --version"
       - name: Commit Docker Changes
