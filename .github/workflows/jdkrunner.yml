@@ -25,16 +25,34 @@ jobs:
           java -version &&
           mvn -version"
 
+      # - name: Install Trivy and Dependencies
+      #   run: |
+      #     docker exec build-env bash -c "
+      #     apt install -y apt-transport-https gnupg lsb-release &&
+      #     wget -qO - https://aquasecurity.github.io/trivy-repo/deb/public.key | gpg --dearmor -o /usr/share/keyrings/trivy-archive-keyring.gpg &&
+      #     echo 'deb [signed-by=/usr/share/keyrings/trivy-archive-keyring.gpg] https://aquasecurity.github.io/trivy-repo/deb $(lsb_release -cs) main' > /etc/apt/sources.list.d/trivy.list &&
+      #     apt update &&
+      #     apt install -y trivy &&
+      #     trivy --version"
+
       - name: Install Trivy and Dependencies
         run: |
           docker exec build-env bash -c "
-          apt install -y apt-transport-https gnupg lsb-release &&
-          wget -qO - https://aquasecurity.github.io/trivy-repo/deb/public.key | gpg --dearmor -o /usr/share/keyrings/trivy-archive-keyring.gpg &&
-          echo 'deb [signed-by=/usr/share/keyrings/trivy-archive-keyring.gpg] https://aquasecurity.github.io/trivy-repo/deb $(lsb_release -cs) main' > /etc/apt/sources.list.d/trivy.list &&
-          apt update &&
-          apt install -y trivy &&
-          trivy --version"
-
+          wget -O trivy.tar.gz https://github.com/aquasecurity/trivy/releases/latest/download/trivy_$(uname -s)_$(uname -m).tar.gz &&
+          mkdir -p /tmp/trivy1 &&
+          tar -xzf trivy.tar.gz -C /tmp/trivy1 &&
+          rm trivy.tar.gz &&
+          cd /tmp/trivy1 &&
+          ./trivy --version"
+      - name: Install jq
+        run: |
+          docker exec build-env bash -c "
+          wget -O jq https://github.com/stedolan/jq/releases/latest/download/jq-linux64 &&
+          chmod +x jq &&
+          mv jq /tmp/jq &&
+          rm trivy.tar.gz &&
+          cd /tmp &&
+          ./jq --version"
       - name: Commit Docker Changes
         run: |
           docker commit build-env custom-java-maven-trivy:latest
