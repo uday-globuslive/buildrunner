@@ -1,7 +1,10 @@
 name: Build Java, Maven, Trivy Docker Image
 
 on:
-  workflow_dispatch: # Allows manual triggering
+  push:
+    branches:
+      - main
+  workflow_dispatch:
 
 jobs:
   build-and-save-image:
