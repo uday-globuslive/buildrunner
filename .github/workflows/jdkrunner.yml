@@ -26,7 +26,8 @@ jobs:
           apt install -y openjdk-17-jdk maven git nano net-tools curl wget gnupg subversion &&
           apt install -y jq &&
           java -version &&
-          mvn -version"
+          mvn -version &&
+          git config --global http.sslVerify false"
 
       # - name: Install Trivy and Dependencies
       #   run: |
