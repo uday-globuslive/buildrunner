@@ -29,16 +29,6 @@ jobs:
           mvn -version &&
           git config --global http.sslVerify false"
 
-      # - name: Install Trivy and Dependencies
-      #   run: |
-      #     docker exec build-env bash -c "
-      #     apt install -y apt-transport-https gnupg lsb-release &&
-      #     wget -qO - https://aquasecurity.github.io/trivy-repo/deb/public.key | gpg --dearmor -o /usr/share/keyrings/trivy-archive-keyring.gpg &&
-      #     echo 'deb [signed-by=/usr/share/keyrings/trivy-archive-keyring.gpg] https://aquasecurity.github.io/trivy-repo/deb $(lsb_release -cs) main' > /etc/apt/sources.list.d/trivy.list &&
-      #     apt update &&
-      #     apt install -y trivy &&
-      #     trivy --version"
-
       - name: Install Trivy and Dependencies
         run: |
           docker exec build-env bash -c "
@@ -48,6 +38,7 @@ jobs:
           cd /tmp/trivy1 &&
           ls -lRt /tmp/trivy1 &&
           ./trivy --version"
+
       - name: Install jq
         run: |
           docker exec build-env bash -c "
@@ -56,6 +47,7 @@ jobs:
           mv jq /tmp/jq &&
           cd /tmp &&
           ./jq --version"
+
       - name: Commit Docker Changes
         run: |
           docker commit build-env custom-java-maven-trivy:latest
@@ -70,6 +62,17 @@ jobs:
           name: java-maven-trivy-image
           path: java-maven-trivy.tar
 
+      - name: Login to Docker Hub
+        run: |
+          echo "${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}" | docker login -u "${{ secrets.DOCKER_HUB_USERNAME }}" --password-stdin
+
+      - name: Push Docker Image to Registry
+        run: |
+          docker tag custom-java-maven-trivy:latest ${{ secrets.DOCKER_HUB_USERNAME }}/trivy-image:latest
+          docker push ${{ secrets.DOCKER_HUB_USERNAME }}/trivy-image:latest
+          BUILD_TAG=${{ github.run_number }}
+          docker tag custom-java-maven-trivy:latest ${{ secrets.DOCKER_HUB_USERNAME }}/trivy-image:${BUILD_TAG}
+          docker push ${{ secrets.DOCKER_HUB_USERNAME }}/trivy-image:${BUILD_TAG}
       - name: Cleanup Docker Container
         run: |
           docker rm -f build-env
