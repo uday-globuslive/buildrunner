@@ -29,16 +29,6 @@ jobs:
           mvn -version &&
           git config --global http.sslVerify false"
 
-      # - name: Install Trivy and Dependencies
-      #   run: |
-      #     docker exec build-env bash -c "
-      #     apt install -y apt-transport-https gnupg lsb-release &&
-      #     wget -qO - https://aquasecurity.github.io/trivy-repo/deb/public.key | gpg --dearmor -o /usr/share/keyrings/trivy-archive-keyring.gpg &&
-      #     echo 'deb [signed-by=/usr/share/keyrings/trivy-archive-keyring.gpg] https://aquasecurity.github.io/trivy-repo/deb $(lsb_release -cs) main' > /etc/apt/sources.list.d/trivy.list &&
-      #     apt update &&
-      #     apt install -y trivy &&
-      #     trivy --version"
-
       - name: Install Trivy and Dependencies
         run: |
           docker exec build-env bash -c "
@@ -48,6 +38,7 @@ jobs:
           cd /tmp/trivy1 &&
           ls -lRt /tmp/trivy1 &&
           ./trivy --version"
+
       - name: Install jq
         run: |
           docker exec build-env bash -c "
@@ -56,19 +47,28 @@ jobs:
           mv jq /tmp/jq &&
           cd /tmp &&
           ./jq --version"
+
       - name: Commit Docker Changes
         run: |
-          docker commit build-env custom-java-maven-trivy:latest
+          docker commit build-env your-docker-username/java-maven-trivy:latest
 
       - name: Save Docker Image as TAR
         run: |
-          docker save -o java-maven-trivy.tar custom-java-maven-trivy:latest
+          docker save -o java-maven-trivy.tar your-docker-username/java-maven-trivy:latest
 
       - name: Upload Docker Image as Artifact
         uses: actions/upload-artifact@v4
         with:
           name: java-maven-trivy-image
           path: java-maven-trivy.tar
+
+      - name: Login to Docker Hub
+        run: |
+          echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+
+      - name: Push Docker Image to Registry
+        run: |
+          docker push your-docker-username/java-maven-trivy:latest
 
       - name: Cleanup Docker Container
         run: |
